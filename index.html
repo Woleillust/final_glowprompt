@@ -3,15 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GlowPrompts — Transforme tes photos avec l'IA</title>
+<title>GlowPrompts Transforme tes photos avec l'IA</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+
+<script src="https://js.chariowcdn.com/v1/widget.min.js" async></script>
+<link rel="stylesheet" href="https://js.chariowcdn.com/v1/widget.min.css">
+
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --black: #000; --near-black: #080808; --surface: #111; --surface-2: #191919;
   --border: rgba(255,255,255,0.07); --border-h: rgba(255,255,255,0.18);
   --white: #fff; --g1: rgba(255,255,255,0.85); --g2: rgba(255,255,255,0.5); --g3: rgba(255,255,255,0.25);
-  --green: #7fff9a; --green-dim: rgba(127,255,154,0.1);
+  --green: #2997ff; --green-dim: rgba(41,151,255,0.1);
   --fd: 'Bricolage Grotesque', sans-serif; --fb: 'DM Sans', sans-serif;
 }
 html { scroll-behavior: smooth; }
@@ -23,27 +27,149 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
 .d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s}
 
 /* NAV */
-nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:18px 28px; display:flex; align-items:center; justify-content:space-between; backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); background:rgba(0,0,0,.55); border-bottom:1px solid var(--border); }
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200; padding:18px 28px;
+  display:flex; align-items:center; justify-content:space-between;
+  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  background:rgba(0,0,0,.55); border-bottom:1px solid var(--border);
+  transition: opacity 0.3s ease;
+}
+nav.hidden { opacity: 0; pointer-events: none; }
 .nav-logo { font-family:var(--fd); font-size:19px; font-weight:700; color:var(--white); text-decoration:none; letter-spacing:-.3px; }
-.nav-logo span { color:var(--g2); }
-.nav-cta { padding:10px 22px; background:var(--white); color:var(--black); border-radius:100px; font-size:13px; font-weight:600; border:none; cursor:pointer; font-family:var(--fb); transition:opacity .2s; }
+.nav-cta { padding:10px 22px; background:var(--green); color:var(--white); border-radius:100px; font-size:13px; font-weight:600; border:none; cursor:pointer; font-family:var(--fb); transition:opacity .2s; }
 .nav-cta:hover { opacity:.85; }
 
-/* HERO */
-.hero { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:130px 24px 90px; position:relative; overflow:hidden; }
-.hero-orb { position:absolute; width:700px; height:700px; background:radial-gradient(circle, rgba(220,225,255,.06) 0%, transparent 65%); top:40%; left:50%; transform:translate(-50%,-50%); pointer-events:none; }
-.hero-badge { display:inline-flex; align-items:center; gap:8px; padding:7px 16px; border:1px solid var(--border); border-radius:100px; font-size:11px; color:var(--g2); letter-spacing:1px; text-transform:uppercase; margin-bottom:36px; background:rgba(255,255,255,.02); }
-.badge-dot { width:6px; height:6px; background:var(--green); border-radius:50%; animation:blink 2.2s infinite; }
-@keyframes blink { 0%,100%{opacity:1}50%{opacity:.25} }
-.hero h1 { font-family:var(--fd); font-size:clamp(44px,11vw,96px); font-weight:800; letter-spacing:-3px; line-height:.95; margin-bottom:28px; max-width:820px; }
-.hero h1 .muted { color:var(--g2); }
-.hero h1 .line3 { display:block; font-size:clamp(16px,3.5vw,28px); font-weight:300; letter-spacing:-.5px; color:var(--g2); margin-top:18px; }
-.hero-sub { font-size:clamp(15px,2.5vw,18px); color:var(--g2); max-width:480px; font-weight:300; margin-bottom:52px; line-height:1.7; }
-.hero-cta { display:flex; flex-direction:column; align-items:center; gap:12px; width:100%; }
-.btn-main { display:inline-flex; align-items:center; justify-content:center; padding:18px 44px; background:var(--white); color:var(--black); border-radius:100px; font-size:16px; font-weight:700; font-family:var(--fd); border:none; cursor:pointer; transition:transform .18s,opacity .18s; width:100%; max-width:340px; letter-spacing:-.3px; }
-.btn-main:hover { transform:scale(1.025); opacity:.9; }
-.hero-price { font-size:13px; color:var(--g3); }
-.hero-price strong { color:var(--g2); }
+.floating-cta { position:fixed; bottom:20px; right:20px; padding:12px 24px; background:var(--green); color:var(--white); border-radius:100px; font-size:14px; font-weight:600; border:none; cursor:pointer; font-family:var(--fb); opacity:0; pointer-events:none; transition:opacity .3s, transform .3s; transform:translateY(10px); z-index:300; box-shadow:0 4px 20px rgba(0,0,0,.3); }
+.floating-cta.show { opacity:1; pointer-events:auto; transform:translateY(0); }
+
+/* ═══════════════════════════════
+   HERO — NOUVELLE STRUCTURE
+   ═══════════════════════════════ */
+.hero {
+  padding-top: 60px; /* Image après la navbar */
+  padding-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  background: var(--black);
+}
+
+/* Container de l'image + texte superposé */
+.hero-banner-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+
+  overflow: hidden;
+  margin: 0 auto 40px auto;
+
+}
+
+/* L'image de fond (banner_b) */
+.hero-banner-container img {
+  width: 100%;
+  height: auto;
+  max-height: 75vh; /* L'image ne prend pas tout l'écran mais une bonne partie */
+  object-fit: cover;
+  object-position: center top; /* On ancre l'image en haut comme demandé */
+  display: block;
+}
+
+/* Overlay pour le texte en bas */
+.hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 80px 24px 50px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  border-radius: 0;
+  background: none !important;
+}
+
+/* 1. TITRE SUR L'IMAGE */
+.hero-title {
+  font-family: var(--fd);
+  font-size: clamp(36px, 6vw, 64px); /* Ajusté pour tenir sur l'image */
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.05;
+  color: var(--white);
+  margin-bottom: 4px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+.hero-title .accent { color: var(--green); }
+
+/* Prix */
+.hero-price {
+  all: unset;
+  color: var(--white) !important;
+  background: none !important;
+}
+
+/* 2. BOUTON SIMPLE */
+.btn-main {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  background: var(--green);
+  color: var(--white);
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--fd);
+  border: none;
+  cursor: pointer;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(41,151,255,.3);
+  /* SUPPRESSION DES EFFETS BIZARRES */
+  transition: background-color 0.2s ease; 
+}
+.btn-main:hover { 
+  background-color: #1a7be6; /* Changement de couleur simple au survol */
+  /* Pas de transform scale */
+}
+
+.hero-price {
+  font-size: 13px;
+  color: rgba(255,255,255,.7);
+  white-space: nowrap;
+  background: rgba(0,0,0,0.4);
+  padding: 4px 10px;
+  border-radius: 12px;
+  backdrop-filter: blur(4px);
+}
+.hero-price strong { color: var(--white); font-weight: 600; }
+
+/* 3. TEXTE BAS (Sous l'image) */
+.hero-bottom-text {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+}
+.hero-tagline {
+  font-family: var(--fd);
+  font-size: clamp(20px, 4vw, 28px);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+.hero-sub {
+  font-size: clamp(15px, 2vw, 17px);
+  color: var(--g2);
+  font-weight: 300;
+  line-height: 1.6;
+}
 
 /* COMMONS */
 .sw { max-width:960px; margin:0 auto; padding:110px 24px; }
@@ -62,11 +188,9 @@ nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:18px 28px; di
 .pain-kicker::before { content:''; display:inline-block; width:22px; height:1px; background:var(--g3); }
 .pain-text h3 { font-family:var(--fd); font-size:clamp(20px,2.8vw,30px); font-weight:700; letter-spacing:-.8px; line-height:1.18; margin-bottom:18px; }
 .pain-text p { font-size:15px; color:var(--g2); line-height:1.85; font-weight:300; }
-.pain-text p strong { color:var(--g1); font-weight:500; }
+.pain-text p strong { color:var(--green); font-weight:500; }
 .pain-visual { background:var(--surface-2); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; min-height:280px; }
 .pain-visual img { width:100%; height:100%; object-fit:cover; opacity:.75; }
-.pain-ph { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; color:var(--g3); font-size:11px; text-align:center; padding:24px; width:100%; height:100%; min-height:280px; }
-.pain-ph svg { width:34px; opacity:.25; }
 .pain-ov { position:absolute; inset:0; background:linear-gradient(135deg,rgba(0,0,0,.4) 0%,transparent 60%); }
 @media(max-width:640px){ .pain-block{grid-template-columns:1fr;} .pain-block.rev{direction:ltr;} .pain-visual{min-height:200px;} .pain-text{padding:32px 24px;} }
 
@@ -85,8 +209,6 @@ nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:18px 28px; di
 .ba-lbl.b{left:14px;background:rgba(0,0,0,.55);color:rgba(255,255,255,.55);}
 .ba-lbl.a{right:14px;background:rgba(255,255,255,.92);color:#000;}
 .ba-cap { position:absolute;top:14px;left:14px;z-index:5;font-size:11px;color:rgba(255,255,255,.5);font-weight:500;letter-spacing:.3px;background:rgba(0,0,0,.5);padding:5px 10px;border-radius:8px; }
-.img-ph { width:100%;height:100%;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--g3);font-size:11px;text-align:center;padding:20px; }
-.img-ph svg{width:26px;opacity:.25;}
 
 /* TESTIMONIALS */
 .testi-grid { display:grid; grid-template-columns:1fr; gap:16px; margin-top:56px; }
@@ -129,7 +251,7 @@ nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:18px 28px; di
 .pft{list-style:none;text-align:left;margin-bottom:40px;display:flex;flex-direction:column;gap:14px;}
 .pft li{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--g1);}
 .pft li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;}
-.btn-buy{width:100%;padding:20px;background:var(--white);color:var(--black);border:none;border-radius:14px;font-size:17px;font-weight:800;font-family:var(--fd);cursor:pointer;transition:transform .15s,opacity .15s;letter-spacing:-.3px;}
+.btn-buy{width:100%;padding:20px;background:var(--green);color:var(--white);border:none;border-radius:14px;font-size:17px;font-weight:800;font-family:var(--fd);cursor:pointer;transition:transform .15s,opacity .15s;letter-spacing:-.3px;}
 .btn-buy:hover{transform:scale(1.015);opacity:.9;}
 .pguarantee{margin-top:16px;font-size:12px;color:var(--g3);}
 
@@ -144,6 +266,20 @@ nav { position:fixed; top:0; left:0; right:0; z-index:200; padding:18px 28px; di
 .fa{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.16,1,.3,1),padding .3s;padding:0 24px;font-size:14px;color:var(--g2);line-height:1.7;}
 .fi.open .fa{max-height:200px;padding:0 24px 22px;}
 
+/* MODAL */
+.modal {
+  position:fixed; z-index:1000; inset:0; background-color:rgba(0,0,0,0.5);
+  opacity:0; visibility:hidden; pointer-events:none; transform:translateY(20px);
+  transition:opacity .25s ease, visibility .25s ease, transform .25s ease;
+}
+.modal.is-open { opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0); }
+.modal-content { background-color:#fff; margin:10% auto; padding:20px; border-radius:8px; width:90%; max-width:600px; position:relative; overflow-y:auto; max-height:80vh; }
+.close { position:absolute; top:10px; right:15px; color:#aaa; font-size:28px; font-weight:bold; cursor:pointer; z-index:10; line-height:1; }
+.close:hover { color:#000; }
+@media(max-width:640px){
+  .modal-content { width:100%; height:80vh; margin:0; position:absolute; bottom:0; border-radius:8px 8px 0 0; }
+}
+
 footer{padding:56px 24px;text-align:center;border-top:1px solid var(--border);}
 .flogo{font-family:var(--fd);font-size:22px;font-weight:700;margin-bottom:10px;}
 footer p{font-size:12px;color:var(--g3);}
@@ -151,23 +287,43 @@ footer p{font-size:12px;color:var(--g3);}
 </head>
 <body>
 
-<nav>
+<nav id="main-nav">
   <a href="#" class="nav-logo">Glow<span>Prompts</span></a>
-  <button class="nav-cta" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Obtenir le pack</button>
+  <button class="nav-cta" onclick="openModal()">Obtenir le pack</button>
 </nav>
 
-<!-- HERO -->
+<button class="floating-cta" onclick="openModal()">Obtenir le pack</button>
+
+<!-- ═══════════════════════════════════════════
+     HERO — NOUVEAU DESIGN
+     ═══════════════════════════════════════════ -->
 <section class="hero">
-  <div class="hero-orb"></div>
-  <h1 class="reveal d1">
-    Tes photos<br><span class="muted">méritent</span> mieux.
-    <span class="line3">Une transformation. Un prompt. Zéro compétence.</span>
-  </h1>
-  <p class="hero-sub reveal d2">GlowPrompts transforme n'importe quelle photo ordinaire en image qui te représente vraiment — ou en business qui te rapporte dès aujourd'hui.</p>
-  <div class="hero-cta reveal d3">
-    <button class="btn-main" onclick="document.getElementById('pricing').scrollIntoView({behavior:'smooth'})">Obtenir GlowPrompts</button>
-    <p class="hero-price">Prix de lancement : <strong>4 900 FCFA</strong> · Droit de revente inclus</p>
+
+  <!-- 1. GRANDE BANNIÈRE (banner_b.png) -->
+  <div class="hero-banner-container reveal">
+    <img src="images/banner_b.png" alt="Banner">
+    
+    <!-- Overlay : Titre + CTA en bas de l'image -->
+    <div class="hero-overlay reveal d1">
+      <h1 class="hero-title">
+        Tes photos <span class="accent">méritent</span> mieux.
+      </h1>
+      
+      <button class="btn-main" onclick="openModal()">Obtenir GlowPrompts</button>
+      <p class="hero-price">Prix de lancement : <strong>4 900 FCFA</strong> · Droit de revente inclus</p>
+    </div>
   </div>
+
+ 
+   <!-- Payment methods below the banner -->
+   <img src="images/payment-methods-white.svg" alt="Payment methods" style="height:32px;margin:16px auto;display:block;">
+ 
+   <!-- 2. TEXTE DESCRIPTIF (En dessous de l'image) -->
+  <div class="hero-bottom-text reveal d2">
+    <p class="hero-tagline">Une transformation. Un prompt. Zéro compétence.</p>
+    <p class="hero-sub">GlowPrompts transforme n'importe quelle photo ordinaire en image qui te représente vraiment ou en business qui te rapporte dès aujourd'hui.</p>
+  </div>
+
 </section>
 
 <div class="div"></div>
@@ -176,26 +332,20 @@ footer p{font-size:12px;color:var(--g3);}
 <section class="pain-section">
   <p class="sl reveal">Soyons honnêtes</p>
   <h2 class="st reveal d1">Est-ce que tu te reconnais<br>dans l'une de ces situations ?</h2>
-
   <div style="margin-top:52px;">
     <div class="pain-block reveal">
       <div class="pain-text">
         <p class="pain-kicker">Pour toi</p>
         <h3>Tu n'as jamais l'air sur tes photos de ce que tu es dans la vraie vie.</h3>
         <p>Tu prends une photo. Tu la regardes. <strong>Quelque chose te déçoit.</strong><br><br>
-        Ce n'est pas toi le problème — c'est que la photo ne capture pas ce que tu es vraiment. La lumière était mauvaise. Le téléphone a raté la mise au point. La peau ne ressort pas comme elle devrait.<br><br>
+        Ce n'est pas toi le problème c'est que la photo ne capture pas ce que tu es vraiment. La lumière était mauvaise. Le téléphone a raté la mise au point. La peau ne ressort pas comme elle devrait.<br><br>
         Tu mérites des photos qui te font honneur. <strong>Pas besoin d'un shooting à 30 000 FCFA pour ça.</strong></p>
       </div>
       <div class="pain-visual">
-        <!-- Remplace par une image évocatrice -->
-        <div class="pain-ph">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="16" r="1"/></svg>
-          Ajoute ici une image<br>qui évoque la déception<br>face à une photo ratée
-        </div>
+        <img src="images/before3.jpeg" alt="Déception face à une photo ratée">
         <div class="pain-ov"></div>
       </div>
     </div>
-
     <div class="pain-block rev reveal">
       <div class="pain-text">
         <p class="pain-kicker">Pour ton business</p>
@@ -205,11 +355,7 @@ footer p{font-size:12px;color:var(--g3);}
         <strong>Ce quelqu'un, ça pourrait être toi dès ce soir.</strong></p>
       </div>
       <div class="pain-visual">
-        <!-- Remplace par une image évocatrice -->
-        <div class="pain-ph">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2a10 10 0 1 1 0 20A10 10 0 0 1 12 2z"/><path d="M12 8v4l3 3"/></svg>
-          Ajoute ici une image<br>qui évoque l'opportunité<br>ou l'argent qui circule
-        </div>
+        <img src="images/after3.png" alt="Opportunité d'affaires">
         <div class="pain-ov"></div>
       </div>
     </div>
@@ -222,13 +368,13 @@ footer p{font-size:12px;color:var(--g3);}
 <section class="sw">
   <p class="sl reveal">Résultats réels</p>
   <h2 class="st reveal d1">La preuve en image.</h2>
-  <p class="ss reveal d2">Glisse sur chaque photo. Toutes les images avant sont brutes — aucune retouche préalable.</p>
+  <p class="ss reveal d2">Glisse sur chaque photo. Toutes les images avant sont brutes aucune retouche préalable.</p>
   <div class="ba-grid">
     <div class="ba-card reveal">
       <span class="ba-cap">Retouche peau</span>
       <div class="ba-sl" data-slider>
-        <div class="ba-af"><div class="img-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M21 15l-5-5L5 21"/></svg>Image APRÈS<br><small>Remplace par ton visuel</small></div></div>
-        <div class="ba-bf"><div class="img-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M21 15l-5-5L5 21"/></svg>Image AVANT<br><small>Remplace par ton visuel</small></div></div>
+        <div class="ba-af"><img src="images/after3.png" alt="Après"></div>
+        <div class="ba-bf"><img src="images/before3.jpeg" alt="Avant"></div>
         <div class="ba-div"></div>
         <div class="ba-hdl"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M9 18l-6-6 6-6M15 6l6 6-6 6"/></svg></div>
         <span class="ba-lbl b">Avant</span><span class="ba-lbl a">Après</span>
@@ -237,8 +383,8 @@ footer p{font-size:12px;color:var(--g3);}
     <div class="ba-card reveal d1">
       <span class="ba-cap">Photo floue → HD</span>
       <div class="ba-sl" data-slider>
-        <div class="ba-af"><div class="img-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M21 15l-5-5L5 21"/></svg>Image APRÈS<br><small>Remplace par ton visuel</small></div></div>
-        <div class="ba-bf"><div class="img-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M21 15l-5-5L5 21"/></svg>Image AVANT<br><small>Remplace par ton visuel</small></div></div>
+        <div class="ba-af"><img src="images/enhancement2.png" alt="Après"></div>
+        <div class="ba-bf"><img src="images/enhancement1.jpeg" alt="Avant"></div>
         <div class="ba-div"></div>
         <div class="ba-hdl"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M9 18l-6-6 6-6M15 6l6 6-6 6"/></svg></div>
         <span class="ba-lbl b">Avant</span><span class="ba-lbl a">Après</span>
@@ -247,8 +393,8 @@ footer p{font-size:12px;color:var(--g3);}
     <div class="ba-card reveal d2">
       <span class="ba-cap">Photo LinkedIn pro</span>
       <div class="ba-sl" data-slider>
-        <div class="ba-af"><div class="img-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M21 15l-5-5L5 21"/></svg>Image APRÈS<br><small>Remplace par ton visuel</small></div></div>
-        <div class="ba-bf"><div class="img-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M21 15l-5-5L5 21"/></svg>Image AVANT<br><small>Remplace par ton visuel</small></div></div>
+        <div class="ba-af"><img src="images/after1.png" alt="Après"></div>
+        <div class="ba-bf"><img src="images/before1.jpeg" alt="Avant"></div>
         <div class="ba-div"></div>
         <div class="ba-hdl"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M9 18l-6-6 6-6M15 6l6 6-6 6"/></svg></div>
         <span class="ba-lbl b">Avant</span><span class="ba-lbl a">Après</span>
@@ -266,43 +412,27 @@ footer p{font-size:12px;color:var(--g3);}
   <p class="ss reveal d2">Leurs photos parlent. Leurs mots confirment.</p>
   <div class="testi-grid">
     <div class="tc reveal">
-      <div class="tc-photo">
-        <!-- Remplace par la photo retouchée du client 1 : <img src="photo-client-1.jpg"> -->
-        <div class="tc-photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Photo retouchée<br>du client 1</div>
-      </div>
+      <div class="tc-photo"><div class="tc-photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Photo retouchée<br>du client 1</div></div>
       <div class="tc-body">
         <div class="tc-stars">★★★★★</div>
         <p class="tc-quote">« Remplace par le vrai avis de ton client. Plus c'est spécifique et authentique, plus ça convertit. »</p>
-        <div class="tc-auth">
-          <div class="tc-av"><div class="tc-av-ph">?</div></div>
-          <div><div class="tc-name">Prénom Nom</div><div class="tc-role">Ville · Usage personnel</div></div>
-        </div>
+        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph">?</div></div><div><div class="tc-name">Prénom Nom</div><div class="tc-role">Ville · Usage personnel</div></div></div>
       </div>
     </div>
     <div class="tc reveal d1">
-      <div class="tc-photo">
-        <div class="tc-photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Photo retouchée<br>du client 2</div>
-      </div>
+      <div class="tc-photo"><div class="tc-photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Photo retouchée<br>du client 2</div></div>
       <div class="tc-body">
         <div class="tc-stars">★★★★★</div>
         <p class="tc-quote">« Remplace par un avis qui parle du gain d'argent ou du service proposé grâce au pack. »</p>
-        <div class="tc-auth">
-          <div class="tc-av"><div class="tc-av-ph">?</div></div>
-          <div><div class="tc-name">Prénom Nom</div><div class="tc-role">Ville · Revendeur</div></div>
-        </div>
+        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph">?</div></div><div><div class="tc-name">Prénom Nom</div><div class="tc-role">Ville · Revendeur</div></div></div>
       </div>
     </div>
     <div class="tc reveal d2">
-      <div class="tc-photo">
-        <div class="tc-photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Photo retouchée<br>du client 3</div>
-      </div>
+      <div class="tc-photo"><div class="tc-photo-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Photo retouchée<br>du client 3</div></div>
       <div class="tc-body">
         <div class="tc-stars">★★★★★</div>
         <p class="tc-quote">« Remplace par un avis qui mentionne la simplicité d'utilisation ou la surprise face au résultat. »</p>
-        <div class="tc-auth">
-          <div class="tc-av"><div class="tc-av-ph">?</div></div>
-          <div><div class="tc-name">Prénom Nom</div><div class="tc-role">Ville · Usage personnel</div></div>
-        </div>
+        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph">?</div></div><div><div class="tc-name">Prénom Nom</div><div class="tc-role">Ville · Usage personnel</div></div></div>
       </div>
     </div>
   </div>
@@ -316,11 +446,11 @@ footer p{font-size:12px;color:var(--g3);}
   <h2 class="st reveal d1">Tout ce qu'il te faut.</h2>
   <p class="ss reveal d2">Un pack complet. Prêt à l'emploi dès aujourd'hui.</p>
   <div class="cl">
-    <div class="ci reveal"><div class="ci-icon">✨</div><div><div class="ci-lbl">Prompt Retouche Peau Pro</div><div class="ci-d">Lissage naturel, éclat préservé — résultats studio en un clic</div></div><div class="ci-chk"><svg viewBox="0 0 12 12" fill="none" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></div></div>
-    <div class="ci reveal d1"><div class="ci-icon">🔍</div><div><div class="ci-lbl">Prompt Restauration Photo Floue</div><div class="ci-d">Photos sombres, pixelisées ou ratées transformées en HD</div></div><div class="ci-chk"><svg viewBox="0 0 12 12" fill="none" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></div></div>
-    <div class="ci reveal d2"><div class="ci-icon">💼</div><div><div class="ci-lbl">Prompt Photo LinkedIn Studio</div><div class="ci-d">Selfie → photo professionnelle digne d'un CV</div></div><div class="ci-chk"><svg viewBox="0 0 12 12" fill="none" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></div></div>
-    <div class="ci reveal d3"><div class="ci-icon">🔄</div><div><div class="ci-lbl">Droit de revente inclus</div><div class="ci-d">Revends ce pack comme le tien — garde 100% des bénéfices</div></div><div class="ci-chk"><svg viewBox="0 0 12 12" fill="none" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></div></div>
-    <div class="ci reveal d4"><div class="ci-icon">📖</div><div><div class="ci-lbl">Guide d'utilisation pas à pas</div><div class="ci-d">Zéro compétence requise — guidé de A à Z</div></div><div class="ci-chk"><svg viewBox="0 0 12 12" fill="none" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></div></div>
+    <div class="ci reveal"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div><div><div class="ci-lbl">Prompt Retouche Peau Pro</div><div class="ci-d">Lissage naturel, éclat préservé résultats studio en un clic</div></div><div class="ci-chk"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><polyline points="2,6 5,9 10,3"/></svg></div></div>
+    <div class="ci reveal d1"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div><div><div class="ci-lbl">Prompt Restauration Photo Floue</div><div class="ci-d">Photos sombres, pixelisées ou ratées transformées en HD</div></div><div class="ci-chk"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><polyline points="2,6 5,9 10,3"/></svg></div></div>
+    <div class="ci reveal d2"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><div><div class="ci-lbl">Prompt Photo LinkedIn Studio</div><div class="ci-d">Selfie → photo professionnelle digne d'un CV</div></div><div class="ci-chk"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><polyline points="2,6 5,9 10,3"/></svg></div></div>
+    <div class="ci reveal d3"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px;"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></div><div><div class="ci-lbl">Droit de revente inclus</div><div class="ci-d">Revends ce pack comme le tien garde 100% des bénéfices</div></div><div class="ci-chk"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><polyline points="2,6 5,9 10,3"/></svg></div></div>
+    <div class="ci reveal d4"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div><div class="ci-lbl">Guide d'utilisation pas à pas</div><div class="ci-d">Zéro compétence requise guidé de A à Z</div></div><div class="ci-chk"><svg viewBox="0 0 12 12" fill="none" stroke-width="1.5"><polyline points="2,6 5,9 10,3"/></svg></div></div>
   </div>
 </section>
 
@@ -342,10 +472,9 @@ footer p{font-size:12px;color:var(--g3);}
       <li>Accès immédiat après paiement</li>
       <li>Support WhatsApp inclus</li>
     </ul>
-    <!-- ══ ZONE CHARIOW — Remplace ce bouton par ton widget Chariow ══ -->
-    <button class="btn-buy">Acheter GlowPrompts maintenant →</button>
-    <!-- ══ FIN ZONE CHARIOW ══ -->
-    <p class="pguarantee">🔒 Paiement sécurisé · Livraison immédiate</p>
+    <button class="btn-buy" onclick="openModal()">Acheter GlowPrompts maintenant</button>
+  <img src="images/payment-methods-white.svg" alt="Payment methods" style="height:32px;margin:16px auto;display:block;">
+    <p class="pguarantee">Paiement sécurisé · Livraison immédiate</p>
   </div>
 </section>
 
@@ -357,7 +486,7 @@ footer p{font-size:12px;color:var(--g3);}
   <h2 class="st reveal d1">Tu as des doutes ?</h2>
   <div class="flist reveal d2">
     <div class="fi"><button class="fq">J'ai besoin de quoi pour utiliser ces prompts ?<span class="ficon">+</span></button><div class="fa">Tu as besoin d'un accès à Gemini (gratuit) ou à un autre outil IA indiqué dans le guide. Zéro logiciel payant obligatoire. Le guide t'explique tout étape par étape.</div></div>
-    <div class="fi"><button class="fq">Est-ce que ça marche sur toutes les photos ?<span class="ficon">+</span></button><div class="fa">Oui — les prompts ont été testés sur des selfies floues, des photos sombres, des images WhatsApp de basse qualité. Les résultats sont visibles même dans les cas difficiles.</div></div>
+    <div class="fi"><button class="fq">Est-ce que ça marche sur toutes les photos ?<span class="ficon">+</span></button><div class="fa">Oui les prompts ont été testés sur des selfies floues, des photos sombres, des images WhatsApp de basse qualité. Les résultats sont visibles même dans les cas difficiles.</div></div>
     <div class="fi"><button class="fq">Comment je reçois le pack après paiement ?<span class="ficon">+</span></button><div class="fa">Automatiquement. Après confirmation de ton paiement via Chariow, tu reçois un lien de téléchargement instantané. Tu peux aussi me contacter sur WhatsApp en cas de problème.</div></div>
     <div class="fi"><button class="fq">Le droit de revente, ça veut dire quoi exactement ?<span class="ficon">+</span></button><div class="fa">Tu peux revendre ce pack à tes clients et garder 100% de l'argent. Tu peux aussi proposer un service de retouche photo payant autour de toi en utilisant ces prompts.</div></div>
     <div class="fi"><button class="fq">Et si les résultats ne me satisfont pas ?<span class="ficon">+</span></button><div class="fa">Si tu suis le guide et que tu n'obtiens pas de résultats visibles, contacte-moi directement sur WhatsApp. Je t'accompagne personnellement jusqu'à ce que ça fonctionne.</div></div>
@@ -369,10 +498,32 @@ footer p{font-size:12px;color:var(--g3);}
   <p>© 2025 GlowPrompts · Tous droits réservés</p>
 </footer>
 
+<!-- MODAL -->
+<div id="chariow-modal" class="modal" onclick="closeModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div id="chariow-widget"
+      data-product-id="prd_0npawh"
+      data-store-domain="gmadrwwz.mychariow.shop"
+      data-style="frame"
+      data-border-style="rounded"
+      data-cta-width="xs"
+      data-cta-animation="shine"
+      data-locale="en"
+      data-primary-color="#1a1a2e"
+      data-background-color="#FFFFFF">
+    </div>
+  </div>
+</div>
+
 <script>
-const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);} }), {threshold:.08});
+// REVEAL
+const obs = new IntersectionObserver(e => e.forEach(x => {
+  if (x.isIntersecting) { x.target.classList.add('visible'); obs.unobserve(x.target); }
+}), { threshold: .08 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
+// SLIDERS
 document.querySelectorAll('[data-slider]').forEach(slider => {
   const bf = slider.querySelector('.ba-bf');
   const dv = slider.querySelector('.ba-div');
@@ -380,26 +531,86 @@ document.querySelectorAll('[data-slider]').forEach(slider => {
   let drag = false;
   function set(x) {
     const r = slider.getBoundingClientRect();
-    const p = Math.min(Math.max((x-r.left)/r.width,0),1)*100;
-    bf.style.clipPath = `inset(0 ${100-p}% 0 0)`;
-    dv.style.left = hdl.style.left = p+'%';
+    const p = Math.min(Math.max((x - r.left) / r.width, 0), 1) * 100;
+    bf.style.clipPath = `inset(0 ${100 - p}% 0 0)`;
+    dv.style.left = hdl.style.left = p + '%';
   }
-  setTimeout(()=>set(slider.getBoundingClientRect().left+slider.getBoundingClientRect().width*.5),100);
-  hdl.addEventListener('mousedown',e=>{drag=true;e.preventDefault();});
-  window.addEventListener('mouseup',()=>drag=false);
-  window.addEventListener('mousemove',e=>{if(drag)set(e.clientX);});
-  hdl.addEventListener('touchstart',e=>{drag=true;e.preventDefault();},{passive:false});
-  window.addEventListener('touchend',()=>drag=false);
-  window.addEventListener('touchmove',e=>{if(drag)set(e.touches[0].clientX);},{passive:true});
+  requestAnimationFrame(() => { const r = slider.getBoundingClientRect(); set(r.left + r.width * 0.5); });
+  hdl.addEventListener('mousedown', e => { drag = true; e.preventDefault(); });
+  window.addEventListener('mouseup', () => drag = false);
+  window.addEventListener('mousemove', e => { if (drag) set(e.clientX); });
+  hdl.addEventListener('touchstart', e => { drag = true; e.preventDefault(); }, { passive: false });
+  window.addEventListener('touchend', () => drag = false);
+  window.addEventListener('touchmove', e => { if (drag) set(e.touches[0].clientX); }, { passive: true });
 });
 
-document.querySelectorAll('.fq').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const fi=btn.closest('.fi'), open=fi.classList.contains('open');
-    document.querySelectorAll('.fi').forEach(i=>i.classList.remove('open'));
-    if(!open)fi.classList.add('open');
+// FAQ
+document.querySelectorAll('.fq').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const fi = btn.closest('.fi');
+    const open = fi.classList.contains('open');
+    document.querySelectorAll('.fi').forEach(i => i.classList.remove('open'));
+    if (!open) fi.classList.add('open');
   });
 });
+
+// NAV
+const mainNav = document.getElementById('main-nav');
+const floatingCta = document.querySelector('.floating-cta');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 200) { mainNav.classList.add('hidden'); floatingCta.classList.add('show'); }
+  else { mainNav.classList.remove('hidden'); floatingCta.classList.remove('show'); }
+}, { passive: true });
+
+// LOCALSTORAGE
+const LS_KEY = 'glowprompts_chariow_form';
+function saveFormData() {
+  try {
+    const modal = document.getElementById('chariow-modal');
+    const inputs = modal.querySelectorAll('input, textarea, select');
+    const data = {};
+    inputs.forEach(input => { const key = input.name || input.id || input.placeholder; if (key) data[key] = input.value; });
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+  } catch (e) {}
+}
+function restoreFormData() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    const modal = document.getElementById('chariow-modal');
+    const inputs = modal.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => { const key = input.name || input.id || input.placeholder; if (key && data[key] !== undefined) input.value = data[key]; });
+  } catch (e) {}
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('chariow-modal');
+  const mutObs = new MutationObserver(() => {
+    restoreFormData();
+    modal.querySelectorAll('input, textarea, select').forEach(input => {
+      if (!input.dataset.glowBound) {
+        input.dataset.glowBound = '1';
+        input.addEventListener('input', saveFormData);
+        input.addEventListener('change', saveFormData);
+      }
+    });
+  });
+  mutObs.observe(modal, { childList: true, subtree: true });
+});
+
+// MODAL
+let _modalCloseTimer = null;
+function openModal() {
+  if (_modalCloseTimer) { clearTimeout(_modalCloseTimer); _modalCloseTimer = null; }
+  document.getElementById('chariow-modal').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  saveFormData();
+  document.getElementById('chariow-modal').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 </script>
 </body>
 </html>
