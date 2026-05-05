@@ -292,8 +292,8 @@ nav#main-nav.hidden { opacity: 0; pointer-events: none; transform: translateY(-1
 .pcard{background:var(--surface);border:1px solid rgba(255,255,255,.12);border-radius:26px;padding:50px 42px;margin-top:48px;position:relative;overflow:hidden;}
 .pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);}
 .pbadge{display:inline-block;padding:5px 14px;background:var(--green-dim);color:var(--green);border-radius:100px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:24px;}
-.pamt{font-family:var(--fd);font-size:76px;font-weight:800;letter-spacing:-4px;line-height:1;margin-bottom:6px;}
-.pamt span{font-size:26px;font-weight:300;color:var(--g2);letter-spacing:0;}
+.pamt{font-family:var(--fd);font-size:clamp(42px,12vw,76px);font-weight:800;letter-spacing:-4px;line-height:1;margin-bottom:6px;white-space:nowrap;}
+.pamt span{font-size:clamp(16px,4vw,26px);font-weight:300;color:var(--g2);letter-spacing:0;}
 .pdesc{font-size:14px;color:var(--g2);margin-bottom:36px;line-height:1.6;}
 .pft{list-style:none;text-align:left;margin-bottom:40px;display:flex;flex-direction:column;gap:14px;}
 .pft li{display:flex;align-items:center;gap:12px;font-size:15px;color:var(--g1);}
@@ -345,7 +345,7 @@ footer p{font-size:12px;color:var(--g3);}
 <nav id="bottom-nav" aria-label="Achat rapide">
   <div class="bnav-info">
     <span class="bnav-name">GlowPrompts</span>
-    <span class="bnav-price">Prix de lancement : <strong>4 900 FCFA</strong></span>
+    <span class="bnav-price">Prix de lancement : <strong>4 900 XOF</strong></span>
   </div>
   <button class="bnav-cta" onclick="openModal()">Obtenir le pack</button>
 </nav>
@@ -364,7 +364,7 @@ footer p{font-size:12px;color:var(--g3);}
         <span class="accent">méritent</span> mieux.
       </h1>
       <button class="btn-main" onclick="openModal()">Obtenir GlowPrompts</button>
-      <p class="hero-price">Prix de lancement : <strong>4 900 FCFA</strong> · Droit de revente inclus</p>
+      <p class="hero-price">Prix de lancement : <strong>4 900 XOF</strong> · Droit de revente inclus</p>
     </div>
   </div>
 
@@ -420,7 +420,7 @@ footer p{font-size:12px;color:var(--g3);}
         <h3>Tu n'as jamais l'air sur tes photos de ce que tu es dans la vraie vie.</h3>
         <p>Tu prends une photo. Tu la regardes. <strong>Quelque chose te déçoit.</strong><br><br>
         Ce n'est pas toi le problème c'est que la photo ne capture pas ce que tu es vraiment. La lumière était mauvaise. Le téléphone a raté la mise au point. La peau ne ressort pas comme elle devrait.<br><br>
-        Tu mérites des photos qui te font honneur. <strong>Pas besoin d'un shooting à 30 000 FCFA pour ça.</strong></p>
+        Tu mérites des photos qui te font honneur. <strong>Pas besoin d'un shooting à 30 000 XOF pour ça.</strong></p>
       </div>
       <div class="pain-visual">
         <img src="images/before3.jpeg" alt="Déception face à une photo ratée">
@@ -432,7 +432,7 @@ footer p{font-size:12px;color:var(--g3);}
         <p class="pain-kicker">Pour ton business</p>
         <h3>Tu regardes les autres gagner de l'argent en ligne et tu te demandes ce qu'ils ont que tu n'as pas.</h3>
         <p>Ce n'est pas le talent. Ce n'est pas l'intelligence. <strong>C'est juste qu'ils ont trouvé le bon produit au bon moment.</strong><br><br>
-        Des gens autour de toi dépensent entre 5 000 et 20 000 FCFA pour faire retoucher leurs photos. Ils cherchent quelqu'un de confiance, de rapide, de professionnel.<br><br>
+        Des gens autour de toi dépensent entre 5 000 et 20 000 XOF pour faire retoucher leurs photos. Ils cherchent quelqu'un de confiance, de rapide, de professionnel.<br><br>
         <strong>Ce quelqu'un, ça pourrait être toi dès ce soir.</strong></p>
       </div>
       <div class="pain-visual">
@@ -524,8 +524,8 @@ footer p{font-size:12px;color:var(--g3);}
       </div>
       <div class="tc-body">
         <div class="tc-stars">★★★★★</div>
-        <p class="tc-quote">« Mon père a pleuré quand il a vu ses vieilles photos restaurées 🥹 Depuis je vends le service sur WhatsApp. Ce mois-ci : 52 000 FCFA. »</p>
-        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div><div><div class="tc-name">Rodrigue K.</div><div class="tc-role">Lomé · Revendeur</div></div></div>
+        <p class="tc-quote">« Mon père a pleuré quand il a vu ses vieilles photos restaurées 🥹 Depuis je vends le service sur WhatsApp. Ce mois-ci : 52 000 XOF. »</p>
+        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div><div><div class="tc-name">Rodrigue K.</div><div class="tc-role">Lomé · Revendeur WhatsApp</div></div></div>
       </div>
     </div>
 
@@ -542,8 +542,8 @@ footer p{font-size:12px;color:var(--g3);}
       </div>
       <div class="tc-body">
         <div class="tc-stars">★★★★★</div>
-        <p class="tc-quote">« Bon j'avoue j'étais devenue accro 🥺. Cette fois j'ai testé le LinkedIn ma cheffe a cru que j'avais payé un photographe. »</p>
-        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div><div><div class="tc-name">Aminata D.</div><div class="tc-role">Dakar ·</div></div></div>
+        <p class="tc-quote">« Même fille, autre prompt 😂 Cette fois j'ai testé le LinkedIn — ma cheffe a cru que j'avais payé un photographe. »</p>
+        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div><div><div class="tc-name">Aminata D.</div><div class="tc-role">Dakar · Usage professionnel</div></div></div>
       </div>
     </div>
 
@@ -575,14 +575,15 @@ footer p{font-size:12px;color:var(--g3);}
   <p class="ss reveal d2">Paiement unique. Accès immédiat. Aucun abonnement.</p>
   <div class="pcard reveal d2">
     <span class="pbadge">Prix de lancement</span>
-    <div class="pamt">4 900 <span>FCFA</span></div>
-    <p class="pdesc">Paiement unique · Livraison instantanée<br><span style="color:rgba(255,255,255,.3)">Prix normal : 9 900 FCFA</span></p>
+    <div class="pamt">4 900 <span>XOF</span></div>
+    <div style="text-align:center;margin-bottom:8px;"><span style="font-size:18px;color:rgba(255,255,255,.35);text-decoration:line-through;letter-spacing:-0.5px;">9 900 XOF</span></div>
+    <p class="pdesc">Paiement unique · Livraison instantanée</p>
     <ul class="pft">
       <li>3 prompts ultra-détaillés</li>
       <li>Guide d'utilisation complet</li>
       <li>Droit de revente inclus</li>
       <li>Accès immédiat après paiement</li>
-      <li>Support WhatsApp inclus</li>
+      <li>Support et communauté WhatsApp inclus</li>
     </ul>
     <button class="btn-buy" onclick="openModal()">Acheter GlowPrompts maintenant</button>
     <img src="images/payment-methods-white.svg" alt="Payment methods" style="height:32px;margin:16px auto;display:block;">
@@ -642,7 +643,10 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-
+/* ─────────────────────────────────────────────
+   SLIDERS  — bug fix : un seul handler global
+   au lieu de N listeners window par slider
+   ───────────────────────────────────────────── */
 (function initSliders() {
   const sliders = Array.from(document.querySelectorAll('[data-slider]'));
   let activeSlider = null;   // seul slider en cours de drag
@@ -660,7 +664,7 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   }
 
   function initOne(slider) {
-    // position initiale 
+    // position initiale — réessaie si l'élément n'a pas encore de largeur
     function tryInit(attempt) {
       const rect = slider.getBoundingClientRect();
       if (rect.width > 0) {
@@ -704,7 +708,7 @@ document.querySelectorAll('.fq').forEach(btn => {
 });
 
 /* ─────────────────────────────────────────────
-   NAV SCROLL  top nav ↑ masqué / bottom nav ↓ visible
+   NAV SCROLL  — top nav ↑ masqué / bottom nav ↓ visible
    ───────────────────────────────────────────── */
 const mainNav   = document.getElementById('main-nav');
 const bottomNav = document.getElementById('bottom-nav');
@@ -720,7 +724,8 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 /* ─────────────────────────────────────────────
-   LOCALSTORAGE  sauvegarde champ formulaire
+   LOCALSTORAGE — sauvegarde champ formulaire
+   bug fix : debounce sur MutationObserver
    ───────────────────────────────────────────── */
 const LS_KEY = 'glowprompts_chariow_form';
 
@@ -789,4 +794,4 @@ function closeModal() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 </script>
 </body>
-</html>
+</html>F
