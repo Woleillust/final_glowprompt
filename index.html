@@ -26,21 +26,88 @@ body::before { content:''; position:fixed; inset:0; background-image:url("data:i
 .reveal.visible { opacity:1; transform:none; }
 .d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s}
 
-/* NAV */
-nav {
+/* ═══════════════════════════════
+   TOP NAV
+   ═══════════════════════════════ */
+nav#main-nav {
   position:fixed; top:0; left:0; right:0; z-index:200; padding:18px 28px;
   display:flex; align-items:center; justify-content:space-between;
   backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
   background:rgba(0,0,0,.55); border-bottom:1px solid var(--border);
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
-nav.hidden { opacity: 0; pointer-events: none; }
+nav#main-nav.hidden { opacity: 0; pointer-events: none; transform: translateY(-100%); }
 .nav-logo { font-family:var(--fd); font-size:19px; font-weight:700; color:var(--white); text-decoration:none; letter-spacing:-.3px; }
 .nav-cta { padding:10px 22px; background:var(--green); color:var(--white); border-radius:100px; font-size:13px; font-weight:600; border:none; cursor:pointer; font-family:var(--fb); transition:opacity .2s; }
 .nav-cta:hover { opacity:.85; }
 
-.floating-cta { position:fixed; bottom:20px; right:20px; padding:12px 24px; background:var(--green); color:var(--white); border-radius:100px; font-size:14px; font-weight:600; border:none; cursor:pointer; font-family:var(--fb); opacity:0; pointer-events:none; transition:opacity .3s, transform .3s; transform:translateY(10px); z-index:300; box-shadow:0 4px 20px rgba(0,0,0,.3); }
-.floating-cta.show { opacity:1; pointer-events:auto; transform:translateY(0); }
+/* ═══════════════════════════════
+   BOTTOM NAV  (remplace floating-cta)
+   ═══════════════════════════════ */
+#bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  background: rgba(0,0,0,.62);
+  border-top: 1px solid var(--border);
+  /* hidden by default */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(100%);
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(.16,1,.3,1);
+  /* give room so the page content doesn't get stuck behind it */
+}
+#bottom-nav.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.bnav-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.bnav-name {
+  font-family: var(--fd);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -.3px;
+}
+.bnav-price {
+  font-size: 12px;
+  color: var(--g2);
+}
+.bnav-price strong {
+  color: var(--white);
+  font-weight: 700;
+}
+.bnav-cta {
+  flex-shrink: 0;
+  padding: 12px 26px;
+  background: var(--green);
+  color: var(--white);
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--fd);
+  border: none;
+  cursor: pointer;
+  letter-spacing: -.2px;
+  transition: opacity .2s, transform .15s;
+  white-space: nowrap;
+}
+.bnav-cta:hover { opacity: .85; transform: scale(1.03); }
+@media(max-width: 400px) {
+  .bnav-name { font-size: 13px; }
+  .bnav-cta { padding: 11px 18px; font-size: 13px; }
+}
 
 /* ═══════════════════════════════
    HERO
@@ -56,7 +123,6 @@ nav.hidden { opacity: 0; pointer-events: none; }
   background: var(--black);
 }
 
-/* Container de l'image + texte superposé */
 .hero-banner-container {
   position: relative;
   width: 100%;
@@ -65,7 +131,6 @@ nav.hidden { opacity: 0; pointer-events: none; }
   margin: 0 auto 0px auto;
 }
 
-/* L'image de fond (banner_b) */
 .hero-banner-container img {
   width: 100%;
   height: auto;
@@ -75,14 +140,12 @@ nav.hidden { opacity: 0; pointer-events: none; }
   display: block;
 }
 
-/* Overlay pour le texte en bas */
 .hero-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  /* Padding ajusté pour tenir le gros texte en bas mais sans toucher le bord */
-  padding: 60px 24px 15px; 
+  padding: 60px 24px 15px;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -92,11 +155,9 @@ nav.hidden { opacity: 0; pointer-events: none; }
   background: none !important;
 }
 
-/* 1. TITRE SUR L'IMAGE */
 .hero-title {
   font-family: var(--fd);
-  
-  font-size: clamp(45px, 6vw, 80px); 
+  font-size: clamp(45px, 6vw, 80px);
   font-weight: 800;
   letter-spacing: -2px;
   line-height: 1.05;
@@ -106,7 +167,6 @@ nav.hidden { opacity: 0; pointer-events: none; }
 }
 .hero-title .accent { color: var(--green); }
 
-/* 2. BOUTON SIMPLE */
 .btn-main {
   display: inline-flex;
   align-items: center;
@@ -122,15 +182,12 @@ nav.hidden { opacity: 0; pointer-events: none; }
   cursor: pointer;
   letter-spacing: -0.2px;
   white-space: nowrap;
-  transition: background-color 0.2s ease; 
+  transition: background-color 0.2s ease;
 }
-.btn-main:hover { 
-  background-color: #1a7be6;
-}
+.btn-main:hover { background-color: #1a7be6; }
 
-/* 3. PRIX (FOND TRANSPARENT) */
 .hero-price {
-  all: unset; 
+  all: unset;
   font-size: 12px;
   color: rgba(255,255,255,0.85);
   white-space: nowrap;
@@ -140,28 +197,6 @@ nav.hidden { opacity: 0; pointer-events: none; }
   display: inline-block;
 }
 .hero-price strong { color: var(--white); font-weight: 700; }
-
-/* 3. TEXTE BAS (Sous l'image) */
-.hero-bottom-text {
-  width: 100%;
-  max-width: 520px;
-  margin: 0 auto;
-  text-align: center;
-}
-.hero-tagline {
-  font-family: var(--fd);
-  font-size: clamp(20px, 4vw, 28px);
-  font-weight: 700;
-  color: var(--white);
-  margin-bottom: 12px;
-  letter-spacing: -0.5px;
-}
-.hero-sub {
-  font-size: clamp(15px, 2vw, 17px);
-  color: var(--g2);
-  font-weight: 300;
-  line-height: 1.6;
-}
 
 /* COMMONS */
 .sw { max-width:960px; margin:0 auto; padding:110px 24px; }
@@ -223,15 +258,14 @@ nav.hidden { opacity: 0; pointer-events: none; }
 
 .testimonials-bg { background:#131514; }
 
-/* Modification pour intégrer le slider dans les témoignages */
 .tc .ba-card {
     border: none;
     border-radius: 0;
     border-bottom: 1px solid var(--border);
-    aspect-ratio: 1/1; /* Format carré pour s'adapter aux anciennes photos */
+    aspect-ratio: 1/1;
     width: 100%;
 }
-.tc .ba-cap { display: none; } /* Masquer la légende technique dans les avis */
+.tc .ba-cap { display: none; }
 
 .tc-body{padding:22px;}
 .tc-stars{color:#FFD166;font-size:13px;letter-spacing:1px;margin-bottom:10px;}
@@ -292,52 +326,50 @@ nav.hidden { opacity: 0; pointer-events: none; }
   .modal-content { width:100%; height:80vh; margin:0; position:absolute; bottom:0; border-radius:8px 8px 0 0; }
 }
 
-footer{padding:56px 24px;text-align:center;border-top:1px solid var(--border);}
+/* Extra bottom padding so last section isn't hidden behind bottom-nav */
+footer { padding:56px 24px 80px; text-align:center; border-top:1px solid var(--border); }
 .flogo{font-family:var(--fd);font-size:22px;font-weight:700;margin-bottom:10px;}
 footer p{font-size:12px;color:var(--g3);}
 </style>
 </head>
 <body>
 
+<!-- TOP NAV -->
 <nav id="main-nav">
   <a href="#" class="nav-logo">Glow<span>Prompts</span></a>
   <button class="nav-cta" onclick="openModal()">Obtenir le pack</button>
 </nav>
 
-<button class="floating-cta" onclick="openModal()">Obtenir le pack</button>
+<!-- BOTTOM NAV (remplace floating-cta) -->
+<nav id="bottom-nav" aria-label="Achat rapide">
+  <div class="bnav-info">
+    <span class="bnav-name"></span>
+    <span class="bnav-price">Prix de lancement : <strong>4 900 FCFA</strong></span>
+  </div>
+  <button class="bnav-cta" onclick="openModal()">Obtenir le pack</button>
+</nav>
 
 <!-- ═══════════════════════════════════════════
      HERO
      ═══════════════════════════════════════════ -->
 <section class="hero">
 
-  <!-- 1. GRANDE BANNIÈRE (banner_b.png) -->
   <div class="hero-banner-container reveal">
     <img src="images/banner_b.png" alt="Banner">
-    
-    <!-- Overlay : Titre + CTA en bas de l'image -->
+
     <div class="hero-overlay reveal d1">
-      <!-- MODIFICATION ICI : Retour à la ligne + Taille grosse originale -->
       <h1 class="hero-title">
         Tes photos<br>
         <span class="accent">méritent</span> mieux.
       </h1>
-      
       <button class="btn-main" onclick="openModal()">Obtenir GlowPrompts</button>
       <p class="hero-price">Prix de lancement : <strong>4 900 FCFA</strong> · Droit de revente inclus</p>
     </div>
   </div>
 
- 
-   <!-- Payment methods below banner -->
-   <!-- MODIFICATION ICI : Taille augmentée (32px -> 48px) -->
-   <img src="images/payment-methods-white.svg" alt="Payment methods" style="height:48px;margin:16px auto;display:block;">
- 
-   <!-- 2. TEXTE DESCRIPTIF (En dessous de l'image) -->
-  <div class="hero-bottom-text reveal d2">
-    <p class="hero-tagline">Une transformation. Un prompt. Zéro compétence.</p>
-    <p class="hero-sub">GlowPrompts transforme n'importe quelle photo ordinaire en image qui te représente vraiment ou en business qui te rapporte dès aujourd'hui.</p>
-  </div>
+  <img src="images/payment-methods-white.svg" alt="Payment methods" style="height:48px;margin:16px auto;display:block;">
+
+  <!-- hero-bottom-text supprimé -->
 
 </section>
 
@@ -459,10 +491,9 @@ footer p{font-size:12px;color:var(--g3);}
   <h2 class="st reveal d1">Ils ont essayé.<br>Ils ne reviennent pas en arrière.</h2>
   <p class="ss reveal d2">Leurs photos parlent. Leurs mots confirment.</p>
   <div class="testi-grid">
-    
+
     <!-- AVIS 1 -->
     <div class="tc reveal">
-      <!-- Slider intégré ici -->
       <div class="ba-card reveal">
         <div class="ba-sl" data-slider>
           <div class="ba-af"><img src="images/apres1.jpg" alt="Après"></div>
@@ -472,7 +503,6 @@ footer p{font-size:12px;color:var(--g3);}
           <span class="ba-lbl b">Avant</span><span class="ba-lbl a">Après</span>
         </div>
       </div>
-      
       <div class="tc-body">
         <div class="tc-stars">★★★★★</div>
         <p class="tc-quote">« Remplace par le vrai avis de ton client. Plus c'est spécifique et authentique, plus ça convertit. »</p>
@@ -482,7 +512,6 @@ footer p{font-size:12px;color:var(--g3);}
 
     <!-- AVIS 2 -->
     <div class="tc reveal d1">
-      <!-- Slider intégré ici -->
       <div class="ba-card reveal">
         <div class="ba-sl" data-slider>
           <div class="ba-af"><img src="images/pro2.jpg" alt="Après"></div>
@@ -492,7 +521,6 @@ footer p{font-size:12px;color:var(--g3);}
           <span class="ba-lbl b">Avant</span><span class="ba-lbl a">Après</span>
         </div>
       </div>
-
       <div class="tc-body">
         <div class="tc-stars">★★★★★</div>
         <p class="tc-quote">« Remplace par un avis qui parle du gain d'argent ou du service proposé grâce au pack. »</p>
@@ -502,7 +530,6 @@ footer p{font-size:12px;color:var(--g3);}
 
     <!-- AVIS 3 -->
     <div class="tc reveal d2">
-      <!-- Slider intégré ici -->
       <div class="ba-card reveal">
         <div class="ba-sl" data-slider>
           <div class="ba-af"><img src="images/link2.jpg" alt="Après"></div>
@@ -512,7 +539,6 @@ footer p{font-size:12px;color:var(--g3);}
           <span class="ba-lbl b">Avant</span><span class="ba-lbl a">Après</span>
         </div>
       </div>
-
       <div class="tc-body">
         <div class="tc-stars">★★★★★</div>
         <p class="tc-quote">« Remplace par un avis qui mentionne la simplicité d'utilisation ou la surprise face au résultat. »</p>
@@ -558,7 +584,7 @@ footer p{font-size:12px;color:var(--g3);}
       <li>Support WhatsApp inclus</li>
     </ul>
     <button class="btn-buy" onclick="openModal()">Acheter GlowPrompts maintenant</button>
-  <img src="images/payment-methods-white.svg" alt="Payment methods" style="height:32px;margin:16px auto;display:block;">
+    <img src="images/payment-methods-white.svg" alt="Payment methods" style="height:32px;margin:16px auto;display:block;">
     <p class="pguarantee">Paiement sécurisé · Livraison immédiate</p>
   </div>
 </section>
@@ -602,122 +628,168 @@ footer p{font-size:12px;color:var(--g3);}
 </div>
 
 <script>
-// REVEAL
-const obs = new IntersectionObserver(e => e.forEach(x => {
-  if (x.isIntersecting) { x.target.classList.add('visible'); obs.unobserve(x.target); }
-}), { threshold: .08 });
+/* ─────────────────────────────────────────────
+   REVEAL ON SCROLL
+   ───────────────────────────────────────────── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      obs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-// SLIDERS
-document.querySelectorAll('[data-slider]').forEach(slider => {
-  const bf = slider.querySelector('.ba-bf');
-  const dv = slider.querySelector('.ba-div');
-  const hdl = slider.querySelector('.ba-hdl');
-  let drag = false;
-  function set(x) {
-    const r = slider.getBoundingClientRect();
-    const p = Math.min(Math.max((x - r.left) / r.width, 0), 1) * 100;
-    bf.style.clipPath = `inset(0 ${100 - p}% 0 0)`;
-    dv.style.left = hdl.style.left = p + '%';
-  }
-  requestAnimationFrame(() => { const r = slider.getBoundingClientRect(); set(r.left + r.width * 0.5); });
-  hdl.addEventListener('mousedown', e => { drag = true; e.preventDefault(); });
-  window.addEventListener('mouseup', () => drag = false);
-  window.addEventListener('mousemove', e => { if (drag) set(e.clientX); });
-  hdl.addEventListener('touchstart', e => { drag = true; e.preventDefault(); }, { passive: false });
-  window.addEventListener('touchend', () => drag = false);
-  window.addEventListener('touchmove', e => { if (drag) set(e.touches[0].clientX); }, { passive: true });
-});
+/* ─────────────────────────────────────────────
+   SLIDERS  — bug fix : un seul handler global
+   au lieu de N listeners window par slider
+   ───────────────────────────────────────────── */
+(function initSliders() {
+  const sliders = Array.from(document.querySelectorAll('[data-slider]'));
+  let activeSlider = null;   // seul slider en cours de drag
 
-// FAQ
+  function setPosition(slider, clientX) {
+    const bf  = slider.querySelector('.ba-bf');
+    const dv  = slider.querySelector('.ba-div');
+    const hdl = slider.querySelector('.ba-hdl');
+    const rect = slider.getBoundingClientRect();
+    if (rect.width === 0) return;   // protection si non visible
+    const pct = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1) * 100;
+    bf.style.clipPath    = `inset(0 ${100 - pct}% 0 0)`;
+    dv.style.left        = pct + '%';
+    hdl.style.left       = pct + '%';
+  }
+
+  function initOne(slider) {
+    // position initiale — réessaie si l'élément n'a pas encore de largeur
+    function tryInit(attempt) {
+      const rect = slider.getBoundingClientRect();
+      if (rect.width > 0) {
+        setPosition(slider, rect.left + rect.width * 0.5);
+      } else if (attempt < 10) {
+        // élément dans un container pas encore rendu (ex: testimonial hors viewport)
+        setTimeout(() => tryInit(attempt + 1), 100 * attempt);
+      }
+    }
+    requestAnimationFrame(() => tryInit(0));
+
+    const hdl = slider.querySelector('.ba-hdl');
+    hdl.addEventListener('mousedown',  e => { activeSlider = slider; e.preventDefault(); }, { passive: false });
+    hdl.addEventListener('touchstart', e => { activeSlider = slider; e.preventDefault(); }, { passive: false });
+  }
+
+  sliders.forEach(s => initOne(s));
+
+  // Handlers globaux uniques (pas de multiplication)
+  window.addEventListener('mousemove', e => {
+    if (activeSlider) setPosition(activeSlider, e.clientX);
+  });
+  window.addEventListener('mouseup', () => { activeSlider = null; });
+
+  window.addEventListener('touchmove', e => {
+    if (activeSlider) setPosition(activeSlider, e.touches[0].clientX);
+  }, { passive: true });
+  window.addEventListener('touchend', () => { activeSlider = null; });
+})();
+
+/* ─────────────────────────────────────────────
+   FAQ ACCORDION
+   ───────────────────────────────────────────── */
 document.querySelectorAll('.fq').forEach(btn => {
   btn.addEventListener('click', () => {
-    const fi = btn.closest('.fi');
+    const fi   = btn.closest('.fi');
     const open = fi.classList.contains('open');
     document.querySelectorAll('.fi').forEach(i => i.classList.remove('open'));
     if (!open) fi.classList.add('open');
   });
 });
 
-// NAV
-const mainNav = document.getElementById('main-nav');
-const floatingCta = document.querySelector('.floating-cta');
+/* ─────────────────────────────────────────────
+   NAV SCROLL  — top nav ↑ masqué / bottom nav ↓ visible
+   ───────────────────────────────────────────── */
+const mainNav   = document.getElementById('main-nav');
+const bottomNav = document.getElementById('bottom-nav');
+
 window.addEventListener('scroll', () => {
-  if (window.scrollY > 200) { mainNav.classList.add('hidden'); floatingCta.classList.add('show'); }
-  else { mainNav.classList.remove('hidden'); floatingCta.classList.remove('show'); }
+  if (window.scrollY > 200) {
+    mainNav.classList.add('hidden');
+    bottomNav.classList.add('show');
+  } else {
+    mainNav.classList.remove('hidden');
+    bottomNav.classList.remove('show');
+  }
 }, { passive: true });
 
-// LOCALSTORAGE
+/* ─────────────────────────────────────────────
+   LOCALSTORAGE — sauvegarde champ formulaire
+   bug fix : debounce sur MutationObserver
+   ───────────────────────────────────────────── */
 const LS_KEY = 'glowprompts_chariow_form';
+
 function saveFormData() {
   try {
-    const modal = document.getElementById('chariow-modal');
-    const inputs = modal.querySelectorAll('input, textarea, select');
+    const inputs = document.getElementById('chariow-modal').querySelectorAll('input, textarea, select');
     const data = {};
-    inputs.forEach(input => { const key = input.name || input.id || input.placeholder; if (key) data[key] = input.value; });
+    inputs.forEach(input => {
+      const key = input.name || input.id || input.placeholder;
+      if (key) data[key] = input.value;
+    });
     localStorage.setItem(LS_KEY, JSON.stringify(data));
   } catch (e) {}
 }
+
 function restoreFormData() {
   try {
     const raw = localStorage.getItem(LS_KEY);
     if (!raw) return;
     const data = JSON.parse(raw);
-    const modal = document.getElementById('chariow-modal');
-    const inputs = modal.querySelectorAll('input, textarea, select');
-    inputs.forEach(input => { const key = input.name || input.id || input.placeholder; if (key && data[key] !== undefined) input.value = data[key]; });
+    document.getElementById('chariow-modal').querySelectorAll('input, textarea, select').forEach(input => {
+      const key = input.name || input.id || input.placeholder;
+      if (key && data[key] !== undefined) input.value = data[key];
+    });
   } catch (e) {}
 }
+
 document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('chariow-modal');
+  let mutDebounce = null;   // bug fix : debounce pour éviter restoreFormData en boucle
+
   const mutObs = new MutationObserver(() => {
-    restoreFormData();
-    modal.querySelectorAll('input, textarea, select').forEach(input => {
-      if (!input.dataset.glowBound) {
-        input.dataset.glowBound = '1';
-        input.addEventListener('input', saveFormData);
-        input.addEventListener('change', saveFormData);
-      }
-    });
+    clearTimeout(mutDebounce);
+    mutDebounce = setTimeout(() => {
+      restoreFormData();
+      modal.querySelectorAll('input, textarea, select').forEach(input => {
+        if (!input.dataset.glowBound) {
+          input.dataset.glowBound = '1';
+          input.addEventListener('input',  saveFormData);
+          input.addEventListener('change', saveFormData);
+        }
+      });
+    }, 80);
   });
+
   mutObs.observe(modal, { childList: true, subtree: true });
 });
 
-// MODAL
+/* ─────────────────────────────────────────────
+   MODAL
+   ───────────────────────────────────────────── */
 let _modalCloseTimer = null;
+
 function openModal() {
   if (_modalCloseTimer) { clearTimeout(_modalCloseTimer); _modalCloseTimer = null; }
   document.getElementById('chariow-modal').classList.add('is-open');
   document.body.style.overflow = 'hidden';
 }
+
 function closeModal() {
   saveFormData();
   document.getElementById('chariow-modal').classList.remove('is-open');
   document.body.style.overflow = '';
 }
+
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
