@@ -20,6 +20,7 @@
 }
 html { scroll-behavior: smooth; }
 body { background: var(--black); color: var(--white); font-family: var(--fb); line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+* { font-weight: 700 !important; }
 body::before { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:0.022; pointer-events:none; z-index:999; }
 
 .reveal { opacity:0; transform:translateY(28px); transition:opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
@@ -200,7 +201,7 @@ nav#main-nav.hidden { opacity: 0; pointer-events: none; transform: translateY(-1
 
 /* COMMONS */
 .sw { max-width:960px; margin:0 auto; padding:110px 24px; }
-.sl { font-size:10px; text-transform:uppercase; letter-spacing:2.5px; color:var(--g3); text-align:center; margin-bottom:14px; }
+.sl { font-size:10px; text-transform:uppercase; letter-spacing:2.5px; color:#FF791B; text-align:center; margin-bottom:14px; }
 .st { font-family:var(--fd); font-size:clamp(30px,6vw,58px); font-weight:800; letter-spacing:-1.5px; line-height:1.05; text-align:center; }
 .ss { text-align:center; color:var(--g2); font-size:17px; font-weight:300; max-width:500px; margin:14px auto 0; line-height:1.7; }
 .div { max-width:960px; margin:0 auto; height:1px; background:var(--border); }
@@ -343,7 +344,7 @@ footer p{font-size:12px;color:var(--g3);}
 <!-- BOTTOM NAV (remplace floating-cta) -->
 <nav id="bottom-nav" aria-label="Achat rapide">
   <div class="bnav-info">
-    <span class="bnav-name"></span>
+    <span class="bnav-name">GlowPrompts</span>
     <span class="bnav-price">Prix de lancement : <strong>4 900 FCFA</strong></span>
   </div>
   <button class="bnav-cta" onclick="openModal()">Obtenir le pack</button>
@@ -505,8 +506,8 @@ footer p{font-size:12px;color:var(--g3);}
       </div>
       <div class="tc-body">
         <div class="tc-stars">★★★★★</div>
-        <p class="tc-quote">« Remplace par le vrai avis de ton client. Plus c'est spécifique et authentique, plus ça convertit. »</p>
-        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div><div><div class="tc-name">Prénom Nom</div><div class="tc-role">Ville · Usage personnel</div></div></div>
+        <p class="tc-quote">« Waaaah 😭 mes boutons ont disparu sur la photo. J'ai changé toutes mes photos de profil le même soir. »</p>
+        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div><div><div class="tc-name">Aminata D.</div><div class="tc-role">Dakar</div></div></div>
       </div>
     </div>
 
@@ -523,8 +524,8 @@ footer p{font-size:12px;color:var(--g3);}
       </div>
       <div class="tc-body">
         <div class="tc-stars">★★★★★</div>
-        <p class="tc-quote">« Remplace par un avis qui parle du gain d'argent ou du service proposé grâce au pack. »</p>
-        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div><div><div class="tc-name">Prénom Nom</div><div class="tc-role">Ville · Revendeur</div></div></div>
+        <p class="tc-quote">« Mon père a pleuré quand il a vu ses vieilles photos restaurées 🥹 Depuis je vends le service sur WhatsApp. Ce mois-ci : 52 000 FCFA. »</p>
+        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div><div><div class="tc-name">Rodrigue K.</div><div class="tc-role">Lomé · Revendeur</div></div></div>
       </div>
     </div>
 
@@ -541,8 +542,8 @@ footer p{font-size:12px;color:var(--g3);}
       </div>
       <div class="tc-body">
         <div class="tc-stars">★★★★★</div>
-        <p class="tc-quote">« Remplace par un avis qui mentionne la simplicité d'utilisation ou la surprise face au résultat. »</p>
-        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div><div><div class="tc-name">Prénom Nom</div><div class="tc-role">Ville · Usage personnel</div></div></div>
+        <p class="tc-quote">« Bon j'avoue j'étais devenue accro 🥺. Cette fois j'ai testé le LinkedIn ma cheffe a cru que j'avais payé un photographe. »</p>
+        <div class="tc-auth"><div class="tc-av"><div class="tc-av-ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div><div><div class="tc-name">Aminata D.</div><div class="tc-role">Dakar ·</div></div></div>
       </div>
     </div>
 
@@ -641,10 +642,7 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-/* ─────────────────────────────────────────────
-   SLIDERS  — bug fix : un seul handler global
-   au lieu de N listeners window par slider
-   ───────────────────────────────────────────── */
+
 (function initSliders() {
   const sliders = Array.from(document.querySelectorAll('[data-slider]'));
   let activeSlider = null;   // seul slider en cours de drag
@@ -662,7 +660,7 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   }
 
   function initOne(slider) {
-    // position initiale — réessaie si l'élément n'a pas encore de largeur
+    // position initiale 
     function tryInit(attempt) {
       const rect = slider.getBoundingClientRect();
       if (rect.width > 0) {
@@ -706,7 +704,7 @@ document.querySelectorAll('.fq').forEach(btn => {
 });
 
 /* ─────────────────────────────────────────────
-   NAV SCROLL  — top nav ↑ masqué / bottom nav ↓ visible
+   NAV SCROLL  top nav ↑ masqué / bottom nav ↓ visible
    ───────────────────────────────────────────── */
 const mainNav   = document.getElementById('main-nav');
 const bottomNav = document.getElementById('bottom-nav');
@@ -722,8 +720,7 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 /* ─────────────────────────────────────────────
-   LOCALSTORAGE — sauvegarde champ formulaire
-   bug fix : debounce sur MutationObserver
+   LOCALSTORAGE  sauvegarde champ formulaire
    ───────────────────────────────────────────── */
 const LS_KEY = 'glowprompts_chariow_form';
 
